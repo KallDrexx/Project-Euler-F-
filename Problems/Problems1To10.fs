@@ -105,3 +105,18 @@ module Problem5 =
         |> List.concat // Concat into one big list of primes with occurances
         |> List.fold foldToMaxOccurances primeAccumulator // Find the max occurance for each prime
         |> List.fold getLeastCommonMultiple 1L // Multiply all primes to the power of their occurance together
+
+module Problem6 =
+    let Run() =
+        // The sum of the squares of the first ten natural numbers is,
+        // 12 + 22 + ... + 102 = 385
+        // The square of the sum of the first ten natural numbers is,
+        // (1 + 2 + ... + 10)2 = 552 = 3025
+        // Hence the difference between the sum of the squares of the first ten natural numbers and the square of the sum is 3025  385 = 2640.
+        // Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum.
+
+        let values = [1..100]
+        let sumOfSquares = values |> List.map (fun x -> float x ** 2.0) |> List.sum
+        let squareOfSums = float (values |> List.sum) ** 2.0
+
+        squareOfSums - sumOfSquares
