@@ -123,3 +123,20 @@ module Problem6 =
             |> List.sum
 
         squareOfSums - sumOfSquares
+
+module Problem7 =
+    let Run() =
+        // By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
+        // What is the 10,001st prime number?
+        let rec getNthPrime foundPrimes current n =
+            let nextValue = current + 1L
+            if List.exists (fun x -> current % x = 0L) foundPrimes then
+                getNthPrime foundPrimes nextValue n
+            else
+                let length = foundPrimes |> List.length
+                if length = (n - 1) then
+                    current
+                else
+                    getNthPrime (foundPrimes @ [current]) nextValue n
+
+        getNthPrime [] 2L 10001
