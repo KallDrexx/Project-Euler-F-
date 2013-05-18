@@ -69,10 +69,7 @@ module Problem5 =
         // What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
         let values = [2..20]
         let primes = Utils.allPrimes [] 2L (values |> List.max |> int64)
-        let zeroPrimeOccurances = primes |> List.map (fun x -> (x, 0))
-
-        let filterNonDivisiblePrimes value prime =
-            value % prime = 0
+        let primeAccumulator = primes |> List.map (fun x -> (x, 0))
                     
         let getPrimeCount primeFactors =
             let folder acc foundPrime = 
@@ -85,9 +82,7 @@ module Problem5 =
 
                 acc |> List.map countPrimes
 
-            primeFactors
-            |> List.fold folder zeroPrimeOccurances
-            |> List.filter (fun y -> snd y > 0)
+            primeFactors |> List.fold folder primeAccumulator
 
         let foldToMaxOccurances acc primeTuple =
             let setIfGreater accTuple =
@@ -108,5 +103,5 @@ module Problem5 =
         |> List.map (fun x -> Utils.GetFactors primes (x |> int64)) // Get the prime factorization for each value
         |> List.map getPrimeCount  // Fold each factorization into a list of how many times each prime is used
         |> List.concat // Concat into one big list of primes with occurances
-        |> List.fold foldToMaxOccurances zeroPrimeOccurances // Find the max occurance for each prime
+        |> List.fold foldToMaxOccurances primeAccumulator // Find the max occurance for each prime
         |> List.fold getLeastCommonMultiple 1L // Multiply all primes to the power of their occurance together
