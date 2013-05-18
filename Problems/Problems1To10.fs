@@ -30,20 +30,9 @@ module Problem3 =
     let Run() =
         // The prime factors of 13195 are 5, 7, 13 and 29.
         // What is the largest prime factor of the number 600851475143 ?
-        let rec allPrimes foundPrimes current max =
-            if current >= max then
-                foundPrimes
-            else
-                let nextValue = current + 1L
-
-                if List.exists (fun x -> current % x = 0L) foundPrimes then
-                    allPrimes foundPrimes nextValue max
-                else
-                    allPrimes (foundPrimes @ [current]) nextValue max                                
-
         let number = 600851475143L
 
-        allPrimes [] 2L (float number |> sqrt |> int64)
+        Utils.allPrimes [] 2L (float number |> sqrt |> int64)
         |> List.filter (fun x -> number % x = 0L)
         |> List.max
 
@@ -73,3 +62,51 @@ module Problem4 =
         |> Seq.toList
         |> List.filter (fun x -> isPalindrome (getDigits x))
         |> List.max
+
+module Problem5 =
+    let Run() =
+        // 2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+        // What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+        let values = [2..20]
+        let primes = Utils.allPrimes [] 2L (values |> List.max |> int64)
+        let zeroPrimeOccurances = primes |> List.map (fun x -> (x, 0))
+
+        let filterNonDivisiblePrimes value prime =
+            value % prime = 0
+                    
+        let getPrimeCount primeFactors =
+            let folder acc foundPrime = 
+                let countPrimes tpl =
+                    let prime, count = tpl
+                    if foundPrime = prime then
+                        prime, count + 1
+                    else
+                        prime, count
+
+                acc |> List.map countPrimes
+
+            primeFactors
+            |> List.fold folder zeroPrimeOccurances
+            |> List.filter (fun y -> snd y > 0)
+
+        let foldToMaxOccurances acc primeTuple =
+            let setIfGreater accTuple =
+                let accPrime, accCount = accTuple
+                let prime, count = primeTuple
+                if prime = accPrime && count > accCount then
+                    prime, count
+                else
+                    accPrime, accCount
+
+            acc |> List.map setIfGreater
+
+        let getLeastCommonMultiple current primeCount = 
+            let prime, count = primeCount
+            current * ((float prime ** float count) |> int64)
+
+        values
+        |> List.map (fun x -> Utils.GetFactors primes (x |> int64)) // Get the prime factorization for each value
+        |> List.map getPrimeCount  // Fold each factorization into a list of how many times each prime is used
+        |> List.concat // Concat into one big list of primes with occurances
+        |> List.fold foldToMaxOccurances zeroPrimeOccurances // Find the max occurance for each prime
+        |> List.fold getLeastCommonMultiple 1L // Multiply all primes to the power of their occurance together
