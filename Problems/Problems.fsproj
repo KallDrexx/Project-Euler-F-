@@ -46,10 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="Problem1.fs" />
-    <Compile Include="Problem2.fs" />
-    <Compile Include="Problem3.fs" />
-    <Compile Include="Problem4.fs" />
+    <Compile Include="Problems1To10.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <PropertyGroup>
