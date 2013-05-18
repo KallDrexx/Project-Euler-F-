@@ -116,7 +116,10 @@ module Problem6 =
         // Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum.
 
         let values = [1..100]
-        let sumOfSquares = values |> List.map (fun x -> float x ** 2.0) |> List.sum
         let squareOfSums = float (values |> List.sum) ** 2.0
+        let sumOfSquares = 
+            values 
+            |> List.map (fun x -> float x ** 2.0) 
+            |> List.sum
 
         squareOfSums - sumOfSquares
