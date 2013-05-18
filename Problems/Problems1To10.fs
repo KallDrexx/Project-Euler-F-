@@ -162,3 +162,43 @@ module Problem8 =
                 getMaxProduct nextIndex (max product currentMax)
 
         getMaxProduct 0 0
+
+module Problem9 =
+    let Run() =
+        // A Pythagorean triplet is a set of three natural numbers, a  b  c, for which, a2 + b2 = c2
+        // For example, 32 + 42 = 9 + 16 = 25 = 52.
+        // There exists exactly one Pythagorean triplet for which a + b + c = 1000.
+        // Find the product abc.
+
+        let value = 1000
+        let maxLength = value / 2
+
+        let mapToTriplet x =
+            let tripleValueTuple y =
+                [(y + 1)..maxLength]
+                |> List.map (fun z -> (x, y, z))
+
+            [(x + 1)..(maxLength - 1)]
+            |> List.map tripleValueTuple
+
+        let tupleEqualsValue tuple =
+            let a, b, c = tuple
+            a + b + c = value
+
+        let isPythagoreanTriplet tuple =
+            let a, b, c = tuple
+            (a * a) + (b * b) = (c * c)
+
+        let getTripletProduct tuple =
+            let a, b, c = tuple
+            a * b * c
+
+        [1..(maxLength - 2)]
+        |> List.map mapToTriplet
+        |> List.concat
+        |> List.concat
+        |> List.filter tupleEqualsValue
+        |> List.filter isPythagoreanTriplet
+        |> List.map getTripletProduct
+        |> List.head
+        
