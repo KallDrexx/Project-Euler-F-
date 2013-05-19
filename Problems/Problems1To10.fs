@@ -32,9 +32,9 @@ module Problem3 =
         // What is the largest prime factor of the number 600851475143 ?
         let number = 600851475143L
 
-        Utils.allPrimes [] 2L (float number |> sqrt |> int64)
-        |> List.filter (fun x -> number % x = 0L)
-        |> List.max
+        Utils.allPrimes (float number |> sqrt |> int64)
+        |> Seq.filter (fun x -> number % x = 0L)
+        |> Seq.max
 
 module Problem4 =
     let Run() =
@@ -68,7 +68,7 @@ module Problem5 =
         // 2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
         // What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
         let values = [2..20]
-        let primes = Utils.allPrimes [] 2L (values |> List.max |> int64)
+        let primes = Utils.allPrimes (values |> List.max |> int64) |> Seq.toList
         let primeAccumulator = primes |> List.map (fun x -> (x, 0))
                     
         let getPrimeCount primeFactors =
@@ -202,3 +202,11 @@ module Problem9 =
         |> List.map getTripletProduct
         |> List.head
         
+module Problem10 =
+    let Run() = 
+        // The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+        // Find the sum of all the primes below two million.
+
+        Utils.allPrimes (2000000L - 1L)
+        |> Seq.sum
+
