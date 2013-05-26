@@ -1,4 +1,4 @@
-﻿namespace Problems1To10
+﻿namespace Problems
 
 module Problem1 =
     let Run() = 
@@ -100,7 +100,7 @@ module Problem5 =
             current * ((float prime ** float count) |> int64)
 
         values
-        |> List.map (fun x -> Utils.GetFactors primes (x |> int64)) // Get the prime factorization for each value
+        |> List.map (fun x -> Utils.GetPrimeFactors primes (x |> int64)) // Get the prime factorization for each value
         |> List.map getPrimeCount  // Fold each factorization into a list of how many times each prime is used
         |> List.concat // Concat into one big list of primes with occurances
         |> List.fold foldToMaxOccurances primeAccumulator // Find the max occurance for each prime

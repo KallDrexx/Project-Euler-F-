@@ -48,6 +48,7 @@
     <None Include="App.config" />
     <Compile Include="Utils.fs" />
     <Compile Include="Problems1To10.fs" />
+    <Compile Include="Problems11To20.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <PropertyGroup>

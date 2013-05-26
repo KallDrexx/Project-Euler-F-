@@ -3,9 +3,11 @@
         let cache = new ResizeArray<int>()
         cache.Add(2)
 
+        let (|IndexOutOfPrimes|) index = index >= cache.Count
+
         let rec isPrime num index = 
             match index with
-            | _ when index >= cache.Count
+            | IndexOutOfPrimes true
                 -> cache.Add(num); 
                     true
             | _ ->  let knownPrime = cache.[index]
@@ -21,15 +23,29 @@
             }
         |> Seq.takeWhile (fun x -> x <= max)
 
-    let rec GetFactors allPrimes value =
+    let rec GetPrimeFactors allPrimes value =
         if value <= 1L then
             []
         else
-            let divisiblePrime = 
-                allPrimes |> List.tryPick (fun x -> if value % x = 0L then Some(x) else None)
+            let divisiblePrime = allPrimes |> List.tryPick (fun x -> if value % x = 0L then Some(x) else None)
+            match divisiblePrime with
+            | None -> []
+            | _    -> (Option.get divisiblePrime) :: (GetPrimeFactors allPrimes (value / (Option.get divisiblePrime)))
 
-            if divisiblePrime = None then
-                []
-            else
-                let nextValue = value / (Option.get divisiblePrime)
-                (Option.get divisiblePrime) :: (GetFactors allPrimes nextValue)
+    let GetAllFactors number =
+        let numbersToTest = [1..(float number |> sqrt |> int)]
+        let rec factorize remainingTests knownFactors =
+            match remainingTests with
+            | [] -> knownFactors
+            | _ 
+                 -> let testValue = List.head remainingTests
+                    if number % testValue = 0 then
+                        factorize (List.tail remainingTests) (testValue :: (number / testValue) :: knownFactors)
+                    else
+                        factorize (List.tail remainingTests) knownFactors
+
+        factorize numbersToTest [] 
+        |> List.toSeq
+        |> Seq.distinct
+        |> Seq.sort
+        |> Seq.toList
