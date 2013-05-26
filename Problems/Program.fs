@@ -7,7 +7,7 @@ open System.Collections.Generic
 let main argv = 
     let sw = Stopwatch.StartNew()
     
-    let solution = Problems.Problem13.Run()
+    let solution = Problems.Problem14.Run()
     sw.Stop()
 
     printfn "%A" solution

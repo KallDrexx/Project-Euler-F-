@@ -61,3 +61,42 @@ module Problem13 =
         |> Seq.take 10
         |> Seq.map (fun x -> x.ToString())
         |> Seq.fold (fun acc x -> acc + x) ""
+
+module Problem14 =
+    open System.Collections.Generic
+
+    let Run() =
+        // Which starting number, under one million, produces the longest chain?
+        let max = 1000000L
+        let cache = new Dictionary<int64, int64>()
+        cache.Add(0L, 0L);
+        cache.Add(1L, 1L);
+                    
+        let rec getLongestChain currentNum currentMaxStart =
+            let rec getChainLength number length =
+                let getNextValue x =
+                    if x % 2L = 0L then
+                        x / 2L
+                    else
+                        (3L * x) + 1L
+
+                // If the next number is cached, add the length from the cache
+                //  Otherwise repeat
+                if cache.ContainsKey(number) then
+                    length + cache.[number]
+                else
+                    getChainLength (getNextValue number) (length + 1L)
+
+            if currentNum >= max then
+                currentMaxStart
+            else
+                let length = getChainLength currentNum 0L
+                cache.Add(currentNum, length)
+                if length > cache.[currentMaxStart] then
+                    getLongestChain (currentNum + 1L) currentNum
+                else
+                    getLongestChain (currentNum + 1L) currentMaxStart
+
+        getLongestChain 2L 1L
+                
+            
